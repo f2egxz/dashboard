@@ -10,6 +10,8 @@ import {
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updateInvoice } from '@/app/lib/actions';
+import { useFormState } from 'react-dom';
+import { useEffect } from 'react';
 
 export default function EditInvoiceForm({
   invoice,
@@ -19,8 +21,17 @@ export default function EditInvoiceForm({
   customers: CustomerField[];
 }) {
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
+  const initialState = { message: null, errors: {} };
+  const [state,dispatch] = useFormState(updateInvoiceWithId,initialState);
+  useEffect(()=>{
+    if(state.errors && Object.keys(state.errors).length>0){
+      const key = Object.keys(state.errors)[0] as keyof typeof state.errors
+      alert(state.errors?.[key]?.[0])
+      console.log(state.errors)
+    }
+  },[state.errors])
   return (
-    <form action={updateInvoiceWithId}>
+    <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
