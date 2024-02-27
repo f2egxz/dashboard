@@ -4,11 +4,11 @@ import '@/app/ui/global.css';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme Dashboard',
-    default: 'Acme 仪表板',
+    template: '%s | gxz',
+    default: 'guoxuzhi',
   },
   description: 'The official Next.js Course Dashboard, built with App Router.',
-  metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
+  metadataBase: new URL('https://www.guoxuzhi.email'),
 };
 
 export default function RootLayout({
