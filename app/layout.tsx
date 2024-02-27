@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   },
   description: 'The official Next.js Course Dashboard, built with App Router.',
   metadataBase: new URL('https://www.guoxuzhi.email'),
+  other: {
+    "baidu-site-verification": 'codeva-AiMezyF9lp',
+  },
 };
 
 export default function RootLayout({
