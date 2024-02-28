@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.guoxuzhi.email'),
   other: {
     "baidu-site-verification": 'codeva-AiMezyF9lp',
+    "google-site-verification":"oquRVvyHJ0hVK6K0p4GA4I3LeULL5t4pKdXNUOaRa3A"
   },
 };
 
