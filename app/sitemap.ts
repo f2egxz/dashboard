@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: 'https://www.guoxuzhi.email/dashboard/customers',
       lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 0.9,
+      priority: 1,
     },
     {
       url: 'https://www.guoxuzhi.email/dashboard',
