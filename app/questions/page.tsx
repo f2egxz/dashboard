@@ -75,6 +75,13 @@ export default function QuestionsPage() {
                       {index + 1}
                     </span>
                     <span className="text-sm text-gray-500">第 {index + 1} 题</span>
+                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                      question.type === 'judgment' 
+                        ? 'bg-orange-100 text-orange-600' 
+                        : 'bg-blue-100 text-blue-600'
+                    }`}>
+                      {question.type === 'judgment' ? '判断题' : '选择题'}
+                    </span>
                   </div>
                   <h2 className="text-xl md:text-2xl font-semibold text-gray-800 leading-relaxed">
                     {question.title}
@@ -83,7 +90,10 @@ export default function QuestionsPage() {
 
                 {/* Options */}
                 <div className="space-y-3 mb-6">
-                  {(['A', 'B', 'C', 'D'] as const).map((option) => (
+                  {(question.type === 'judgment' 
+                    ? (['A', 'B'] as const)
+                    : (['A', 'B', 'C', 'D'] as const)
+                  ).map((option) => (
                     <button
                       key={option}
                       onClick={() => handleSelectAnswer(question.id, option)}
@@ -142,7 +152,11 @@ export default function QuestionsPage() {
                         <p className="text-gray-700 leading-relaxed">{question.explanation}</p>
                         <div className="mt-3 pt-3 border-t border-blue-200">
                           <span className="text-sm text-gray-600">
-                            正确答案：<span className="font-bold text-green-600">{question.correctAnswer}</span>
+                            正确答案：<span className="font-bold text-green-600">
+                              {question.correctAnswer === 'A' ? (question.type === 'judgment' ? '正确' : question.correctAnswer) : 
+                               question.correctAnswer === 'B' ? (question.type === 'judgment' ? '错误' : question.correctAnswer) : 
+                               question.correctAnswer}
+                            </span>
                           </span>
                           {selected && (
                             <span className="ml-4 text-sm text-gray-600">
@@ -152,7 +166,9 @@ export default function QuestionsPage() {
                                   isCorrect ? 'text-green-600' : 'text-red-600'
                                 }`}
                               >
-                                {selected}
+                                {selected === 'A' ? (question.type === 'judgment' ? '正确' : selected) : 
+                                 selected === 'B' ? (question.type === 'judgment' ? '错误' : selected) : 
+                                 selected}
                               </span>
                             </span>
                           )}
