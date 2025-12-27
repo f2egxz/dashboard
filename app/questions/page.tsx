@@ -1,58 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-interface Question {
-  id: number;
-  title: string;
-  options: {
-    A: string;
-    B: string;
-    C: string;
-    D: string;
-  };
-  correctAnswer: 'A' | 'B' | 'C' | 'D';
-  explanation: string;
-}
-
-const mockQuestions: Question[] = [
-  {
-    id: 1,
-    title: 'React 中，以下哪个 Hook 用于在组件挂载时执行副作用？',
-    options: {
-      A: 'useState',
-      B: 'useEffect',
-      C: 'useContext',
-      D: 'useReducer',
-    },
-    correctAnswer: 'B',
-    explanation: 'useEffect Hook 用于在组件挂载、更新或卸载时执行副作用操作，比如数据获取、订阅或手动修改 DOM。',
-  },
-  {
-    id: 2,
-    title: '在 JavaScript 中，以下哪个方法可以创建一个新数组，包含通过测试函数的所有元素？',
-    options: {
-      A: 'map()',
-      B: 'filter()',
-      C: 'reduce()',
-      D: 'forEach()',
-    },
-    correctAnswer: 'B',
-    explanation: 'filter() 方法创建一个新数组，包含通过所提供函数实现的测试的所有元素。它不会改变原数组。',
-  },
-  {
-    id: 3,
-    title: 'CSS 中，以下哪个属性用于设置元素的圆角？',
-    options: {
-      A: 'border-radius',
-      B: 'border-style',
-      C: 'border-width',
-      D: 'border-color',
-    },
-    correctAnswer: 'A',
-    explanation: 'border-radius 属性用于设置元素的圆角。可以设置一个值（所有角）或分别设置四个角的值。',
-  },
-];
+import { questionData } from './questionData';
 
 export default function QuestionsPage() {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, 'A' | 'B' | 'C' | 'D' | null>>({});
@@ -74,7 +23,7 @@ export default function QuestionsPage() {
 
   const getOptionClass = (questionId: number, option: 'A' | 'B' | 'C' | 'D') => {
     const selected = selectedAnswers[questionId] === option;
-    const isCorrect = option === mockQuestions.find((q) => q.id === questionId)?.correctAnswer;
+    const isCorrect = option === questionData.find((q) => q.id === questionId)?.correctAnswer;
     const showAnswer = showExplanations[questionId];
 
     let baseClass =
@@ -109,7 +58,7 @@ export default function QuestionsPage() {
 
         {/* Questions List */}
         <div className="space-y-6">
-          {mockQuestions.map((question, index) => {
+          {questionData.map((question, index) => {
             const selected = selectedAnswers[question.id];
             const showExplanation = showExplanations[question.id];
             const isCorrect = selected === question.correctAnswer;
@@ -222,7 +171,7 @@ export default function QuestionsPage() {
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-full shadow-md">
             <span className="text-gray-600">已完成</span>
             <span className="font-bold text-blue-600">
-              {Object.keys(selectedAnswers).length} / {mockQuestions.length}
+              {Object.keys(selectedAnswers).length} / {questionData.length}
             </span>
             <span className="text-gray-600">题</span>
           </div>
