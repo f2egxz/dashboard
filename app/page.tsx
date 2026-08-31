@@ -1,60 +1,53 @@
-import AcmeLogo from '@/app/ui/acme-logo';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import Image from 'next/image';
+import { ArrowDownIcon, ArrowUpRightIcon, CheckIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
-import styles from '@/app/ui/home.module.css';
-import clsx from 'clsx';
+import SiteChrome from '@/app/ui/site-chrome';
+import { getLocale, copy, getSolutions } from '@/app/lib/i18n';
 
 export default function Page() {
+  const text = copy[getLocale()];
+  const solutions = getSolutions(getLocale());
+  const workflowRows = text.flow.map((row, index) => ({ ...row, tone: ['ink', 'orange', 'blue'][index] }));
   return (
-    <main className="flex min-h-screen flex-col p-6">
-      <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
-        <AcmeLogo />
-      </div>
-      <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-        <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
-          <div className="h-0 w-0 border-b-[30px] border-l-[20px] border-r-[20px] border-b-black border-l-transparent border-r-transparent" />
-          <div className={styles.shape} /> 
-          <Link href={'/dashboard'} className='text-blue-500'>管理页面</Link>
-          <Link href={'/dashboard/customers'} className='bg-blue-500 font-medium text-white'>新闻</Link>
-          <p
-            className={clsx(
-              lusitana.className,
-              `text-xl text-gray-800 md:text-3xl md:leading-normal`,
-            )}
-          >
-            <strong>Welcome to Acme.</strong> This is the example for the{' '}
-            <a href="https://nextjs.org/learn/" className="text-blue-500">
-              Next.js Learn Course
-            </a>
-            , brought to you by Vercel.
-          </p>
-          <Link
-            href="/login"
-            className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
-          >
-            <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
-          </Link>
-        </div>
-        <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-          {/* Add Hero Images Here */}
-          <Image
-            src="/hero-desktop.png"
-            width={1000}
-            height={760}
-            className="hidden md:block"
-            alt="Screenshots of the dashboard project showing desktop version"
-          />
-          <Image
-            src="/hero-mobile.png"
-            width={560}
-            height={620}
-            className="block md:hidden"
-            alt="Screenshot of the dashboard project showing mobile version"
-          />
-        </div>
-      </div>
-    </main>
+    <>
+      <SiteChrome />
+      <main>
+        <section className="hero-shell page-grid">
+          <div className="hero-copy">
+            <p className="eyebrow">{text.heroEyebrow}</p>
+            <h1 className={`${lusitana.className} hero-title`}>{text.heroTitle}</h1>
+            <p className="hero-lede">{text.heroLede}</p>
+            <div className="hero-actions">
+              <a className="button button-dark" href={`mailto:hello@guoxuzhi.email?subject=${encodeURIComponent(text.mailSubject)}`}>{text.heroCta} <ArrowUpRightIcon aria-hidden="true" /></a>
+              <Link className="text-link" href="/solutions">{text.heroBrowse} <ArrowDownIcon aria-hidden="true" /></Link>
+            </div>
+            <div className="hero-note"><span className="status-dot" aria-hidden="true" />{text.heroNote}</div>
+          </div>
+          <div className="flow-board" aria-label={text.flowAria}>
+            <div className="flow-board-top"><span>{text.flowTitle}</span><span className="flow-id">{text.flowId}</span></div>
+            <div className="flow-track">
+              {workflowRows.map((row, index) => (
+                <div className="flow-row" key={row.label}>
+                  <div className={`flow-node flow-node-${row.tone}`}><span className="flow-index">0{index + 1}</span><span className="flow-label">{row.label}</span><strong>{row.value}</strong></div>
+                  {index < workflowRows.length - 1 ? <div className="flow-line" aria-hidden="true" /> : null}
+                </div>
+              ))}
+            </div>
+            <div className="flow-board-foot"><span>{text.flowFootA}</span><span>{text.flowFootB}</span></div>
+          </div>
+        </section>
+
+        <section className="statement-band"><div className="page-grid statement-grid"><h2 className={`${lusitana.className} section-title`}>{text.statementTitle}</h2><div className="statement-body"><p>{text.statementBody}</p><div className="check-list">{text.checks.map((item) => <span key={item}><CheckIcon aria-hidden="true" />{item}</span>)}</div></div></div></section>
+
+        <section className="section page-grid" id="solutions"><div className="section-heading-row"><div><p className="eyebrow">{text.solutionsEyebrow}</p><h2 className={`${lusitana.className} section-title`}>{text.solutionsTitle}</h2></div><Link className="text-link" href="/solutions">{text.allSolutions} <ArrowUpRightIcon aria-hidden="true" /></Link></div><div className="solution-list">{solutions.map((solution, index) => <Link className="solution-row" href={`/solutions/${solution.slug}`} key={solution.slug}><span className="solution-number">0{index + 1}</span><div><h3>{solution.title}</h3><p>{solution.summary}</p></div><ArrowUpRightIcon className="row-arrow" aria-hidden="true" /></Link>)}</div></section>
+
+        <section className="section section-dark" id="process"><div className="page-grid process-grid"><div><p className="eyebrow eyebrow-light">{text.processEyebrow}</p><h2 className={`${lusitana.className} section-title section-title-light`}>{text.processTitle}</h2></div><div className="process-steps">{text.process.map((step,index) => <div className="process-step" key={step.title}><span>0{index + 1}</span><div><h3>{step.title}</h3><p>{step.body}</p></div></div>)}</div></div></section>
+
+        <section className="section page-grid" id="cases"><div className="section-heading-row"><div><p className="eyebrow">{text.casesEyebrow}</p><h2 className={`${lusitana.className} section-title`}>{text.casesTitle}</h2></div><span className="quiet-label">{text.synthetic}</span></div><div className="case-feature"><div className="case-copy"><span className="case-tag">{text.caseTag}</span><h3 className={`${lusitana.className}`}>{text.caseTitle}</h3><p>{text.caseBody}</p><Link className="button button-outline" href="/cases">{text.caseCta} <ArrowUpRightIcon aria-hidden="true" /></Link></div><div className="case-visual" aria-label={text.caseAria}><div className="case-visual-bar"><span className="mini-dot mini-dot-orange" /><span className="mini-dot mini-dot-blue" /><span className="mini-dot mini-dot-ink" /><span>{text.caseFile}</span></div>{text.caseRows.map((row) => <div className="case-log" key={row.time}><span>{row.time}</span><strong>{row.title}</strong><em className={row.time === '10:31' ? 'case-alert' : ''}>{row.meta}</em></div>)}<div className="case-result"><span>OUTPUT</span><strong>{text.output}</strong><CheckIcon aria-hidden="true" /></div></div></div></section>
+
+        <section className="contact-band" id="contact"><div className="page-grid contact-grid"><div><p className="eyebrow">{text.nextEyebrow}</p><h2 className={`${lusitana.className} section-title`}>{text.nextTitle}</h2></div><div className="contact-action"><p>{text.nextBody}</p><a className="button button-dark" href={`mailto:hello@guoxuzhi.email?subject=${encodeURIComponent(text.mailSubject)}`}><EnvelopeIcon aria-hidden="true" /> hello@guoxuzhi.email</a></div></div></section>
+      </main>
+      <footer className="footer page-grid"><span>© 2026 GXZ / Workflow Studio</span><span>{text.footer}</span></footer>
+    </>
   );
 }
