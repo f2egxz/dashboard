@@ -1,24 +1,12 @@
-import { MetadataRoute } from 'next'
- 
+import { MetadataRoute } from 'next';
+import { solutions } from '@/app/lib/solutions';
+import { locales } from '@/app/lib/i18n';
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: 'https://www.guoxuzhi.email',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: 'https://www.guoxuzhi.email/dashboard/customers',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: 'https://www.guoxuzhi.email/dashboard',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.5,
-    },
-  ]
+  return locales.flatMap((locale) => [
+    { url: `https://www.guoxuzhi.email/${locale}`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 1 },
+    { url: `https://www.guoxuzhi.email/${locale}/solutions`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
+    ...solutions.map((solution) => ({ url: `https://www.guoxuzhi.email/${locale}/solutions/${solution.slug}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 })),
+    { url: `https://www.guoxuzhi.email/${locale}/cases`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 },
+  ]);
 }
