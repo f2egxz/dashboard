@@ -7,10 +7,13 @@ const localeSet = new Set<string>(locales);
 
 function detectLocale(request: NextRequest): Locale {
   const cookieLocale = request.cookies.get('site-locale')?.value;
-  if (cookieLocale && localeSet.has(cookieLocale)) return cookieLocale as Locale;
+  if (cookieLocale && localeSet.has(cookieLocale))
+    return cookieLocale as Locale;
 
   const accepted = request.headers.get('accept-language')?.toLowerCase() ?? '';
-  const match = locales.find((locale) => accepted.split(',').some((part) => part.trim().startsWith(locale)));
+  const match = locales.find((locale) =>
+    accepted.split(',').some((part) => part.trim().startsWith(locale)),
+  );
   return match ?? 'en';
 }
 
@@ -26,8 +29,14 @@ export function middleware(request: NextRequest) {
     url.pathname = pathname.slice(segment.length + 1) || '/';
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set('x-locale', segment);
-    const response = NextResponse.rewrite(url, { request: { headers: requestHeaders } });
-    response.cookies.set('site-locale', segment, { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' });
+    const response = NextResponse.rewrite(url, {
+      request: { headers: requestHeaders },
+    });
+    response.cookies.set('site-locale', segment, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+    });
     return response;
   }
 
@@ -38,5 +47,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)',
+  ],
 };
